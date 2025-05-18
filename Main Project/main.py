@@ -52,14 +52,14 @@ def add_student():
                 port=int(db_settings['port']),
                 user=db_settings['user'],
                 password=db_settings['password'],
-                database='student_db'
+                database='student_management'
             )
             my_cursor = conn.cursor()
             now = datetime.now()
             added_date = now.date()
             added_time = now.time()
 
-            query = '''INSERT INTO student_data (id, name, mobile, email, address, gender, dob, added_date, added_time)
+            query = '''INSERT INTO student_info (id, name, mobile, email, address, gender, dob, added_date, added_time)
                 VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
             values = (
                 entries['id'].get(),
@@ -86,7 +86,7 @@ def add_student():
             messagebox.showerror('Error', f'Failed to insert data: {str(e)}', parent = add_window)
             return
 
-        my_cursor.execute('Select * From student_data')
+        my_cursor.execute('Select * From student_info')
         fetched_data = my_cursor.fetchall()
         student_table.delete(*student_table.get_children())
 
@@ -143,14 +143,14 @@ def search_student():
             return
 
         try:
-            query = f"SELECT * FROM student_data WHERE {' OR '.join(filters)}"
+            query = f"SELECT * FROM student_info WHERE {' OR '.join(filters)}"
 
             conn = pymysql.connect(
                 host=db_settings['host'],
                 port=int(db_settings['port']),
                 user=db_settings['user'],
                 password=db_settings['password'],
-                database='student_db'
+                database='student_management'
             )
             my_cursor = conn.cursor()
             my_cursor.execute(query, values)
@@ -213,17 +213,17 @@ def delete_student():
             port=int(db_settings['port']),
             user=db_settings['user'],
             password=db_settings['password'],
-            database='student_db'
+            database='student_management'
         )
         my_cursor = conn.cursor()
 
         # Delete the student
-        delete_query = "DELETE FROM student_data WHERE id = %s"
+        delete_query = "DELETE FROM student_info WHERE id = %s"
         my_cursor.execute(delete_query, (content_id,))
         conn.commit()
 
         # Fetch the updated data
-        my_cursor.execute("SELECT * FROM student_data")
+        my_cursor.execute("SELECT * FROM student_info")
         fetched_data = my_cursor.fetchall()
 
         student_table.delete(*student_table.get_children())
@@ -246,14 +246,14 @@ def update_student():
                 port=int(db_settings['port']),
                 user=db_settings['user'],
                 password=db_settings['password'],
-                database='student_db'
+                database='student_management'
             )
             my_cursor = conn.cursor()
             now = datetime.now()
             added_date = now.date()
             added_time = now.time()
 
-            update_query = '''UPDATE student_data
+            update_query = '''UPDATE student_info
             SET name=%s, mobile=%s, email=%s, address=%s, gender=%s, dob=%s, added_date=%s, added_time=%s
             WHERE id=%s'''
 
@@ -273,7 +273,7 @@ def update_student():
             conn.commit()
 
             # Refresh the treeview
-            my_cursor.execute("SELECT * FROM student_data")
+            my_cursor.execute("SELECT * FROM student_info")
             fetched_data = my_cursor.fetchall()
             student_table.delete(*student_table.get_children())
             for row in fetched_data:
@@ -329,12 +329,12 @@ def show_student():
             port=int(db_settings['port']),
             user=db_settings['user'],
             password=db_settings['password'],
-            database='student_db'
+            database='student_management'
         )
 
         my_cursor = conn.cursor()
 
-        query = "SELECT * FROM student_data"
+        query = "SELECT * FROM student_info"
         my_cursor.execute(query)
 
         fetched_data = my_cursor.fetchall()
@@ -449,10 +449,10 @@ def connect_database():
             }
             my_cursor = conn.cursor()
 
-            my_cursor.execute("CREATE DATABASE IF NOT EXISTS student_db")
-            my_cursor.execute("USE student_db")
+            my_cursor.execute("CREATE DATABASE IF NOT EXISTS student_management")
+            my_cursor.execute("USE student_management")
             my_cursor.execute('''
-                CREATE TABLE IF NOT EXISTS student_data (
+                CREATE TABLE IF NOT EXISTS student_info (
                     id INT NOT NULL PRIMARY KEY,
                     name VARCHAR(100),
                     mobile VARCHAR(100),
@@ -562,14 +562,14 @@ student_table.pack(fill=BOTH, expand=1)
 student_table.config(show = 'headings')
 
 student_table.column('ID', width=100, anchor=CENTER)
-student_table.column('Name', width=200, anchor=CENTER)
+student_table.column('Name', width=250, anchor=CENTER)
 student_table.column('Mobile Number', width=180, anchor=CENTER)
-student_table.column('Email', width=200, anchor=CENTER)
-student_table.column('Address', width=200, anchor=CENTER)
-student_table.column('Gender', width=100, anchor=CENTER)
-student_table.column('DOB', width=160, anchor=CENTER)
-student_table.column('Added Date', width=140, anchor=CENTER)
-student_table.column('Added Time', width=140, anchor=CENTER)
+student_table.column('Email', width=250, anchor=CENTER)
+student_table.column('Address', width=250, anchor=CENTER)
+student_table.column('Gender', width=120, anchor=CENTER)
+student_table.column('DOB', width=180, anchor=CENTER)
+student_table.column('Added Date', width=150, anchor=CENTER)
+student_table.column('Added Time', width=150, anchor=CENTER)
 
 for col in columns:
     student_table.heading(col, text=col)
