@@ -8,7 +8,7 @@ from datetime import datetime
 import pandas
 
 
-# Connect to Database
+# ---------------- Connect to Database ---------------- #
 db_settings = {}
 
 def connect_database():
@@ -16,7 +16,7 @@ def connect_database():
     choice_win.title("Connect to Database")
     choice_win.geometry('440x220+448+200')
     choice_win.resizable(False, False)
-    choice_win.grab_set()
+    choice_win.grab_set()  # Makes this popup modal
 
     label = Label(choice_win, text="Choose connection mode:", font=("Arial", 12, "bold"))
     label.pack(pady=20)
@@ -29,20 +29,18 @@ def connect_database():
         choice_win.destroy()
         connect_manually()
 
-    btn_auto = ttk.Button(choice_win, text="Connect Automatically", width=25, command=auto_connect)
+    btn_auto = ttk.Button(choice_win, text="Connect Automatically", width=20, command=auto_connect)
     btn_auto.pack(pady=5)
 
-    btn_manual = ttk.Button(choice_win, text="Connect Manually", width=25, command=manual_connect)
+    btn_manual = ttk.Button(choice_win, text="Connect Manually", width=20, command=manual_connect)
     btn_manual.pack(pady=5)
 
 def connect_automatically():
     global db_settings
-    db_settings = {
-        'host': 'localhost',
-        'port': 3306,
-        'user': 'root',
-        'password': ''
-    }
+    db_settings['host'] = 'localhost'
+    db_settings['port'] = 3307
+    db_settings['user'] = 'root'
+    db_settings['password'] = ''
 
     try:
         conn = pymysql.connect(
@@ -64,18 +62,16 @@ def connect_automatically():
                 address VARCHAR(255),
                 gender VARCHAR(50),
                 date_of_birth VARCHAR(50),
-                added_date DATE,
-                added_time TIME
+                added_date Date,
+                added_time Time
             )
         ''')
-
         messagebox.showinfo("Success", "Connected to the server successfully!")
         conn.commit()
         conn.close()
 
         for btn in left_frame_buttons_list[:-1]:
             btn.config(state='normal')
-
     except Exception as e:
         messagebox.showerror("Connection Failed", f"Automatic connection failed:\n{e}")
 
@@ -91,28 +87,27 @@ def connect_manually():
             global db_settings
             db_settings = {
                 'host': host_entry.get().strip(),
-                'port': int(port_entry.get().strip()),
+                'port': port_entry.get().strip(),
                 'user': user_entry.get().strip(),
                 'password': password_entry.get().strip()
             }
-
             my_cursor = conn.cursor()
-            my_cursor.execute("CREATE DATABASE IF NOT EXISTS student_db")
-            my_cursor.execute("USE student_db")
+
+            my_cursor.execute("CREATE DATABASE IF NOT EXISTS student_management")
+            my_cursor.execute("USE student_management")
             my_cursor.execute('''
-                CREATE TABLE IF NOT EXISTS student_data (
+                CREATE TABLE IF NOT EXISTS student_info (
                     id INT NOT NULL PRIMARY KEY,
                     name VARCHAR(100),
                     mobile VARCHAR(100),
                     email VARCHAR(100),
                     address VARCHAR(255),
                     gender VARCHAR(50),
-                    date_of_birth VARCHAR(50),
-                    added_date DATE,
-                    added_time TIME
+                    dob VARCHAR(50),
+                    added_date Date,
+                    added_time Time
                 )
             ''')
-
             messagebox.showinfo("Success", "Connected to the server successfully!", parent=connect_window)
             connect_window.destroy()
             conn.commit()
@@ -143,10 +138,10 @@ def connect_manually():
     user_entry.grid(row=2, column=1, padx=20, pady=5)
 
     Label(connect_window, text='Password:', font=('Helvetica', 16, 'bold')).grid(row=3, column=0, padx=20, pady=5, sticky=E)
-    password_entry = Entry(connect_window, font=('Arial', 14), bd=2, show='*')
+    password_entry = Entry(connect_window, font=('Arial', 14), bd=2, show = '*')
     password_entry.grid(row=3, column=1, padx=20, pady=5)
 
-    connect_btn = ttk.Button(connect_window, text='Connect', command=try_connect)
+    connect_btn = ttk.Button(connect_window, text='Connect', command= connect_manually)
     connect_btn.grid(row=4, columnspan=2, pady=15)
 
 
@@ -632,14 +627,14 @@ student_table.pack(fill=BOTH, expand=1)
 student_table.config(show = 'headings')
 
 student_table.column('ID', width=100, anchor=CENTER)
-student_table.column('Name', width=250, anchor=CENTER)
+student_table.column('Name', width=200, anchor=CENTER)
 student_table.column('Mobile Number', width=180, anchor=CENTER)
-student_table.column('Email', width=250, anchor=CENTER)
-student_table.column('Address', width=250, anchor=CENTER)
-student_table.column('Gender', width=120, anchor=CENTER)
-student_table.column('DOB', width=180, anchor=CENTER)
-student_table.column('Added Date', width=150, anchor=CENTER)
-student_table.column('Added Time', width=150, anchor=CENTER)
+student_table.column('Email', width=200, anchor=CENTER)
+student_table.column('Address', width=200, anchor=CENTER)
+student_table.column('Gender', width=100, anchor=CENTER)
+student_table.column('Date of Birth', width=160, anchor=CENTER)
+student_table.column('Added Date', width=140, anchor=CENTER)
+student_table.column('Added Time', width=140, anchor=CENTER)
 
 for col in columns:
     student_table.heading(col, text=col)
