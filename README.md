@@ -18,6 +18,7 @@ Main Project/
 │
 ├── login.py
 ├── main.py
+├── main_v2_0.py
 └── tempCodeRunnerFile.py
 
 # Student Management System
