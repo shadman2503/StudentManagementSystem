@@ -366,22 +366,24 @@ def export_data():
 
     try:
         # Collect all rows from the Treeview
-        indexing = student_table.get_children()
-        new_list = []
+        tree_items = student_table.get_children()
+        data_rows = []
 
-        for index in indexing:
-            content = student_table.item(index)
-            data_list = content['values']
-            new_list.append(data_list)
+        for item in tree_items:
+            row_values = student_table.item(item)['values']
+            data_rows.append(row_values)
 
         # Create a DataFrame using pandas
-        table = pandas.DataFrame(new_list, columns=[
+        table = pandas.DataFrame(data_rows, columns=[
             'ID', 'Name', 'Mobile Number', 'Email', 'Address',
             'Gender', 'DOB', 'Added Date', 'Added Time'
         ])
 
-        # Save the DataFrame to a CSV file
-        table.to_csv(url, index=False)
+        # Save as CSV or Excel depending on file extension
+        if url.endswith('.xlsx'):
+            table.to_excel(url, index=False)
+        else:
+            table.to_csv(url, index=False)
 
         # Show success message
         messagebox.showinfo('Success', 'Data has been saved successfully.')

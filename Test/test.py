@@ -39,7 +39,7 @@ def connect_automatically():
     global db_settings
     db_settings = {
         'host': 'localhost',
-        'port': 3306,
+        'port': 3307,
         'user': 'root',
         'password': ''
     }
@@ -509,24 +509,22 @@ def export_data():
 
     try:
         # Collect all rows from the Treeview
-        tree_items = student_table.get_children()
-        data_rows = []
+        indexing = student_table.get_children()
+        new_list = []
 
-        for item in tree_items:
-            row_values = student_table.item(item)['values']
-            data_rows.append(row_values)
+        for index in indexing:
+            content = student_table.item(index)
+            data_list = content['values']
+            new_list.append(data_list)
 
         # Create a DataFrame using pandas
-        table = pandas.DataFrame(data_rows, columns=[
+        table = pandas.DataFrame(new_list, columns=[
             'ID', 'Name', 'Mobile Number', 'Email', 'Address',
             'Gender', 'Date of Birth', 'Added Date', 'Added Time'
         ])
 
-        # Save as CSV or Excel depending on file extension
-        if url.endswith('.xlsx'):
-            table.to_excel(url, index=False)
-        else:
-            table.to_csv(url, index=False)
+        # Save the DataFrame to a CSV file
+        table.to_csv(url, index=False)
 
         # Show success message
         messagebox.showinfo('Success', 'Data has been saved successfully.')
@@ -634,14 +632,14 @@ student_table.pack(fill=BOTH, expand=1)
 student_table.config(show = 'headings')
 
 student_table.column('ID', width=100, anchor=CENTER)
-student_table.column('Name', width=250, anchor=CENTER)
+student_table.column('Name', width=200, anchor=CENTER)
 student_table.column('Mobile Number', width=180, anchor=CENTER)
-student_table.column('Email', width=250, anchor=CENTER)
-student_table.column('Address', width=250, anchor=CENTER)
-student_table.column('Gender', width=120, anchor=CENTER)
-student_table.column('Date of Birth', width=180, anchor=CENTER)
-student_table.column('Added Date', width=150, anchor=CENTER)
-student_table.column('Added Time', width=150, anchor=CENTER)
+student_table.column('Email', width=200, anchor=CENTER)
+student_table.column('Address', width=200, anchor=CENTER)
+student_table.column('Gender', width=100, anchor=CENTER)
+student_table.column('Date of Birth', width=160, anchor=CENTER)
+student_table.column('Added Date', width=140, anchor=CENTER)
+student_table.column('Added Time', width=140, anchor=CENTER)
 
 for col in columns:
     student_table.heading(col, text=col)
