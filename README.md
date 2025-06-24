@@ -6,20 +6,20 @@ This project allows users to add, update, delete, and search student information
 ✅ It uses **Python 3** and connects to a **MySQL database** for storing student records.  
 The system supports features like real-time searching and exporting data to CSV for backups.  
 
-Main Project/
+Student Management System/
 │
 ├── image/
 │ ├── background.jpg
+│ ├── eye_closed.png
+│ ├── eye_open.png
 │ ├── graduated.png
 │ ├── logo.png
 │ ├── logo_2.png
 │ ├── pass.png
 │ └── user.png
 │
-├── login.py
 ├── main.py
-├── main_v2_0.py
-└── tempCodeRunnerFile.py
+├── sms.py
 
 # Student Management System
 
@@ -42,10 +42,9 @@ Main Project/
 
 1. Clone this repo:
    git clone https://github.com/shadman2503/StudentManagementSystem
-2. Open the `Main Project` folder.
-3. Run the app:
+2. Run the app:
 
-> Make sure you have Python 3.11+ installed.
+> Make sure you have Python 3.11+ and MySQL installed.
 
 ## 🙋‍♂️ Author
 
