@@ -549,7 +549,7 @@ left_frame_buttons_list = []
 
 def left_frame_buttons(frame):
 
-    logo_image = PhotoImage(file='Main Project/image/logo_2.png')
+    logo_image = PhotoImage(file='image/logo_2.png')
     logo_label = Label(frame, image=logo_image)
     logo_label.image = logo_image
     logo_label.grid(row=0, column=0)
