@@ -1,0 +1,11 @@
+# Ignore Python bytecode and cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore temporary files
+tempCodeRunnerFile.py
